@@ -1,0 +1,113 @@
+name: affiliate-autopilot
+
+x-app: &app
+  build: .
+  restart: unless-stopped
+  env_file: [.env]
+  depends_on:
+    migrate:
+      condition: service_completed_successfully
+    redis:
+      condition: service_healthy
+  networks: [autopilot]
+  volumes: [media_data:/app/media]
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: affiliate_autopilot
+      POSTGRES_USER: affiliate
+      POSTGRES_PASSWORD: affiliate
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U affiliate -d affiliate_autopilot"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [autopilot]
+
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: [redis_data:/data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [autopilot]
+
+  migrate:
+    build: .
+    restart: "no"
+    env_file: [.env]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["node", "dist/src/migrate.js"]
+    networks: [autopilot]
+
+  api:
+    <<: *app
+    environment: { PROCESS_ROLE: api }
+    ports: ["3000:3000"]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+
+  scheduler:
+    <<: *app
+    environment: { PROCESS_ROLE: scheduler }
+
+  product-worker:
+    <<: *app
+    environment: { PROCESS_ROLE: product-worker }
+
+  content-worker:
+    <<: *app
+    environment: { PROCESS_ROLE: content-worker }
+
+  snapgen-worker:
+    <<: *app
+    environment: { PROCESS_ROLE: snapgen-worker }
+
+  qa-worker:
+    <<: *app
+    environment: { PROCESS_ROLE: qa-worker }
+
+  publishing-worker:
+    <<: *app
+    environment: { PROCESS_ROLE: publishing-worker }
+
+  analytics-worker:
+    <<: *app
+    environment: { PROCESS_ROLE: analytics-worker }
+
+  notification-worker:
+    <<: *app
+    environment: { PROCESS_ROLE: notification-worker }
+
+  dashboard:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports: ["8088:80"]
+    volumes:
+      - ./dashboard:/usr/share/nginx/html:ro
+      - ./infra/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks: [autopilot]
+
+volumes:
+  postgres_data:
+  redis_data:
+  media_data:
+
+networks:
+  autopilot:

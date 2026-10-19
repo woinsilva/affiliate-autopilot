@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Affiliate Autopilot · Achadinhos</title>
+  <link rel="stylesheet" href="/styles.css?v=12">
+</head>
+<body>
+  <main>
+    <header>
+      <div><p class="eyebrow">AFFILIATE AUTOPILOT</p><h1>Achadinhos</h1><p class="muted">Operação, conteúdo e resultados em um só lugar.</p></div>
+      <div class="actions"><span id="status" class="pill">Carregando…</span><span id="snapgen-credits" class="pill credit-pill">Créditos: consultando…</span><span id="publishing-limits-status" class="pill">Cotas sociais: consultando…</span><span id="mercado-livre-status" class="pill">Mercado Livre: consultando…</span><button id="connect-mercado-livre" class="secondary">Conectar Mercado Livre</button><button id="finish-mercado-livre" class="secondary" hidden>Finalizar conexão</button><span id="tiktok-status" class="pill">TikTok: consultando…</span><button id="connect-tiktok" class="secondary">Conectar TikTok</button><span id="youtube-status" class="pill">YouTube: consultando…</span><button id="connect-youtube" class="secondary">Conectar YouTube</button><button id="run">Rodar ciclo agora</button><button id="report" class="secondary">Enviar relatório</button></div>
+    </header>
+    <section id="safety" class="safety"></section>
+    <section id="pipeline-status" class="pipeline-status" hidden aria-live="polite"></section>
+    <section class="import-panel">
+      <div class="section-title"><div><p class="eyebrow">ENTRADA OFICIAL</p><h2>Adicionar produtos do Mercado Livre</h2></div><span class="muted">Links meli.la · até 100 por lote</span></div>
+      <p class="muted helper">Cole um link oficial <code>meli.la</code> por linha. O sistema buscará título, preço, fotos e vídeo informado no anúncio. Com duas fotos, prepara um vídeo vertical e um carrossel para o Instagram; sem fotos suficientes, oferece geração por IA. Revise tudo antes de publicar.</p>
+      <textarea id="official-links" rows="4" placeholder="https://meli.la/..."></textarea>
+      <div class="generation-settings"><div class="video-controls"><div class="field field-wide"><label for="generation-model">Modelo para as próximas gerações</label><select id="generation-model" disabled><option value="">Carregando modelos…</option></select></div><div class="field"><label for="generation-duration">Duração</label><select id="generation-duration" disabled></select></div><div class="field"><label for="generation-aspect">Formato</label><select id="generation-aspect" disabled></select></div><div class="field"><label for="generation-resolution">Resolução</label><select id="generation-resolution" disabled></select></div><div class="field"><label for="generation-mode">Modo</label><select id="generation-mode" disabled></select></div><p id="model-help" class="muted field-wide">As opções mudam conforme as capacidades oficiais de cada IA.</p></div><div id="model-details" class="model-details"><span class="muted">Selecione um modelo para ver suas capacidades.</span></div></div>
+      <div class="import-actions"><button id="prepare">Preparar produtos</button><span id="import-message" class="muted"></span></div>
+      <div id="import-rows" class="import-rows"></div>
+    </section>
+    <section class="cards" id="cards"></section>
+    <section class="grid">
+      <article><div class="section-title"><h2>Conteúdo recente</h2><span id="updated" class="muted"></span></div><div id="batch-publish" class="batch-publish" hidden><strong>Aprovar em lote</strong><p class="muted">Selecione os vídeos revisados. Cada destino entra na fila separadamente; limites de publicação são reagendados automaticamente.</p><div class="batch-controls"><label><input type="checkbox" class="batch-platform" value="instagram" checked> Instagram</label><label><input type="checkbox" class="batch-platform" value="tiktok" checked> TikTok</label><label><input type="checkbox" class="batch-platform" value="youtube" checked> YouTube</label></div><div id="batch-tiktok-options" class="batch-tiktok-options"><label>Visibilidade TikTok <select id="batch-tiktok-privacy"><option value="">Consultar opções da conta…</option></select></label><label class="consent"><input type="checkbox" id="batch-music-consent"> Concordo com a <a href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en" target="_blank" rel="noopener noreferrer">Confirmação de Uso de Música do TikTok</a> para estes vídeos.</label></div><button id="batch-submit">Aprovar selecionados</button><span id="batch-message" role="status"></span></div><div class="table-wrap"><table><thead><tr><th><input id="batch-select-all" type="checkbox" aria-label="Selecionar todos os vídeos pendentes"></th><th>Produto</th><th>Status</th><th>QA</th><th>Ação</th></tr></thead><tbody id="recent"></tbody></table></div></article>
+      <article><h2>Alertas</h2><div id="alerts"></div></article>
+    </section>
+  </main>
+  <dialog id="preview-dialog">
+    <div class="dialog-head"><div><p class="eyebrow">REVISÃO HUMANA</p><h2 id="preview-title">Prévia do conteúdo</h2></div><button id="close-preview" class="secondary" aria-label="Fechar">Fechar</button></div>
+    <div id="preview-body"></div>
+  </dialog>
+  <script src="/app.js?v=33"></script>
+</body>
+</html>
